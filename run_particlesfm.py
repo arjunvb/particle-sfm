@@ -23,7 +23,11 @@ import shutil
 
 
 def connect_point_trajectory(
-    args, image_dir, output_dir, skip_exists=False, keep_intermediate=False
+    args,
+    image_dir,
+    output_dir,
+    skip_exists=False,
+    keep_intermediate=False,
 ):
     # set directories in the workspace
     flow_dir = os.path.join(output_dir, "optical_flows")
@@ -36,10 +40,20 @@ def connect_point_trajectory(
     )
 
     print("[ParticleSFM] Running pairwise optical flow inference......")
-    compute_raft_custom_folder(image_dir, flow_dir, skip_exists=skip_exists)
+    compute_raft_custom_folder(
+        image_dir,
+        flow_dir,
+        skip_exists=skip_exists,
+        apply_blur=args.apply_blur,
+    )
     if not args.skip_path_consistency:
         print("[ParticleSfM] Running pairwise optical flow inference (stride 2)......")
-        compute_raft_custom_folder_stride2(image_dir, flow_dir, skip_exists=skip_exists)
+        compute_raft_custom_folder_stride2(
+            image_dir,
+            flow_dir,
+            skip_exists=skip_exists,
+            apply_blur=args.apply_blur,
+        )
 
     # point trajectory (saved in workspace_dir / point_trajectories)
     from point_trajectory import main_connect_point_trajectories
@@ -264,6 +278,11 @@ def parse_args():
         "--keep_intermediate",
         action="store_true",
         help="whether to keep intermediate files such as flows, monocular depths, etc.",
+    )
+    parser.add_argument(
+        "--apply_blur",
+        action="store_true",
+        help="apply motion blur",
     )
 
     # input by sequence directory

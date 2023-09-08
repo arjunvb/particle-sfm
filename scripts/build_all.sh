@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # set your customized python executable
-# PYTHON_EXECUTABLE=/media/shaoliu/anaconda/envs/particlesfm/bin/python
-PYTHON_EXECUTABLE=/microtel/data3/anaconda3/envs/particlesfm/bin/python
+PYTHON_EXECUTABLE=$(which python)
 
 
 # build point trajectory optimizer
